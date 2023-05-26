@@ -402,7 +402,7 @@
                     <div class="product-item bg-light mb-4">
                         <div class="card w-100"">
                             <div class="product-img position-relative overflow-hidden ">
-                                <img class="img-fluid w-100"  src="Controlador_IMG?id=${p.getId()}" alt="">
+                                <img class="img-fluid w-100"  src="Controlador_IMG?id=${p.getId()}" style="height:400px; width:400px; max-width:450px; max-height:450px;" alt="">
                                 <div class="product-action">
                                     <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
                                     <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
