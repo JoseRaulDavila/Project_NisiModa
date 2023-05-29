@@ -58,6 +58,8 @@ public class Controlador_IMG extends HttpServlet {
             throws ServletException, IOException {
         int id=Integer.parseInt(request.getParameter("id"));
         pdao.listarImg(id, response);
+        
+       
     }
 
     /**

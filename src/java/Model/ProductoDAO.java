@@ -21,20 +21,44 @@ import java.util.List;
  * @author U20207297
  */
 public class ProductoDAO {
+
     Connection con;
-    Conexion cn=new Conexion();
+    Conexion cn = new Conexion();
     PreparedStatement ps;
     ResultSet rs;
-    
-    public List listar(){
-    List<Producto>productos=new ArrayList<>();
-    String sql="SELECT * FROM producto";
+
+    public Producto listarId(int id) {
+        String sql = "SELECT * FROM producto WHERE idproducto=" + id;
+        Producto p = new Producto();
+
         try {
-           con=cn.getConnection();
-           ps=con.prepareStatement(sql);
-           rs=ps.executeQuery();
+            con = cn.getConnection();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
             while (rs.next()) {
-                Producto p=new Producto();
+                p.setId(rs.getInt(1));
+                p.setNombres(rs.getString(2));
+                p.setCantidad(rs.getInt(3));
+                p.setEstado(rs.getString(4));
+                p.setFoto(rs.getBinaryStream(5));
+                p.setDescripcion(rs.getString(6));
+                p.setPrecio(rs.getInt(7));
+
+            }
+        } catch (Exception e) {
+        }
+        return p;
+    }
+
+    public List listar() {
+        List<Producto> productos = new ArrayList<>();
+        String sql = "SELECT * FROM producto";
+        try {
+            con = cn.getConnection();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Producto p = new Producto();
                 p.setId(rs.getInt(1));
                 p.setNombres(rs.getString(2));
                 p.setCantidad(rs.getInt(3));
@@ -43,37 +67,39 @@ public class ProductoDAO {
                 p.setDescripcion(rs.getString(6));
                 p.setPrecio(rs.getInt(7));
                 productos.add(p);
-                
+
             }
         } catch (Exception e) {
-            
+
         }
         return productos;
     }
-    public void listarImg(int id, HttpServletResponse response){
-         String sql="select * from producto where idproducto="+id;
-         InputStream inputStream =null;
-         OutputStream outputStream=null;
-         BufferedInputStream bufferedInputStream=null;
-         BufferedOutputStream bufferedOutputStream=null;
-         
-         try {
-             outputStream=response.getOutputStream();
-            con=cn.getConnection();
-            ps=con.prepareStatement(sql);
-            rs=ps.executeQuery();
-             if (rs.next()) {
-                 inputStream=rs.getBinaryStream("Foto");
-             }
-            bufferedInputStream=new BufferedInputStream(inputStream);
-            bufferedOutputStream=new BufferedOutputStream(outputStream);
-            int i=0;
-             while ((i=bufferedInputStream.read())!=-1) {
+
+    public void listarImg(int id, HttpServletResponse response) {
+        String sql = "select * from producto where idproducto=" + id;
+        InputStream inputStream = null;
+        OutputStream outputStream = null;
+        BufferedInputStream bufferedInputStream = null;
+        BufferedOutputStream bufferedOutputStream = null;
+
+        try {
+            outputStream = response.getOutputStream();
+            con = cn.getConnection();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                inputStream = rs.getBinaryStream("Foto");
+            }
+            bufferedInputStream = new BufferedInputStream(inputStream);
+            bufferedOutputStream = new BufferedOutputStream(outputStream);
+            int i = 0;
+            while ((i = bufferedInputStream.read()) != -1) {
                 bufferedOutputStream.write(i);
-             }
-            
+            }
+
         } catch (Exception e) {
         }
     }
-    
+
+
 }

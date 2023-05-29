@@ -4,6 +4,7 @@
  */
 package Controller;
 
+import Model.Carrito;
 import Model.Producto;
 import Model.ProductoDAO;
 import jakarta.servlet.http.HttpServlet;
@@ -29,13 +30,42 @@ public class Controlador extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     ProductoDAO pdao=new ProductoDAO();
+    Producto p=new Producto();
     List<Producto> productos=new ArrayList<>();
+    List<Carrito> listarCarrito=new ArrayList<>();
+    int item;
+    double totalPagar=0.0;
+    int catidad=1;
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String accion=request.getParameter("accion");
         productos=pdao.listar();
         switch(accion){
-            case "ejemplo":
+            
+            case "AgregarCarrito":
+                int idp=Integer.parseInt(request.getParameter("id"));
+                p=pdao.listarId(idp);
+                item=item+1;
+                Carrito car=new Carrito();
+                car.setItem(item);
+                car.setIdProducto(p.getId());
+                car.setNombres(p.getNombres());
+                car.setDescripcion(p.getDescripcion());
+                car.setPrecioCompra(p.getPrecio());              
+                car.setCantidad(catidad);
+                car.setSubTotal(catidad*p.getPrecio());
+                listarCarrito.add(car);
+                request.setAttribute("contador", listarCarrito.size());
+                request.getRequestDispatcher("Controlador?accion=home").forward(request, response);
+                
+                
+                break;
+                
+            case "Carrito":
+                totalPagar=0.0;
+                request.setAttribute("carrito", listarCarrito);
+                request.getRequestDispatcher("carrito.jsp").forward(request, response);
                 break;
                 default:
                    request.setAttribute("productos", productos);
